@@ -264,12 +264,7 @@ export default class register extends Component {
          
           </div>
 
-            {/* <div className="flex-sb-m w-full  p-t-10 p-b-32"> */}
             <div className="p-t-10 p-b-32">
-
-             {/* <a href={`${config.baseUrl}generatepassword`} >
-                Forgot Password?
-              </a> */}
              <div>
              
               <Link style={{float:'right'}} to={`${config.baseUrl}login`}>

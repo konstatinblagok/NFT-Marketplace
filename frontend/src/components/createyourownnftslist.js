@@ -14,8 +14,6 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import Countdown,{zeroPad} from 'react-countdown';
 import Loader from "react-loader-spinner";
 import Web3 from 'web3';
-import { TwitterShareButton, TwitterIcon, FacebookShareButton, FacebookIcon } from 'react-share';
-import {Helmet} from "react-helmet";
 
 const headers = {
     'Content-Type': 'application/json'
@@ -56,30 +54,6 @@ async getitemAPI() {
       });
 }
 
-    //  is_approved :0 => Pending
-    //  is_approved :1 => Approval
-    //  is_approved :2 => Reject
-    //  is_approved :3 => not applied
-   async talentStatusAPI(){
-      await axios({
-         method: 'post',
-         url: `${config.apiUrl}getTelentStatus`,
-         data: {'user_id':this.loginData.data.id}
-      })
-         .then(result => {
-            if (result.data.success === true) {
-               if(result.data.response[0].telent_status === 2 || result.data.response[0].telent_status === 3 || result.data.response[0].telent_status === 0){
-                  window.location.href = `${config.baseUrl}createyourownnfts`
-               }
-               else if(result.data.response[0].telent_status === 1){
-                 window.location.href = `${config.baseUrl}featurescreator/${this.loginData.data.id}`
-               }
-            }
-            else if (result.data.success === false) {
-            }
-         }).catch(err => {
-         });
-      }
 
       loginCheck(){
          if(this.loginData.length === 0){
@@ -180,14 +154,6 @@ async getitemAPI() {
         return (    
 
             <>
-
-            {/* <Helmet>
-            <title>Test</title>
-            <meta property="og:description" content="Kamlesh asdsa test" />
-            <meta property="og:url" content={window.location.href} />
-            <meta property="og:image" content= "https://ipfs.io/ipfs/QmNhJfj9Kbc2ym5LoCajpuUYQSjZzbSUeK6of2mohQCq7Y" />
-            </Helmet> */}
-
   <Header/>
   <div id="content-block">
        <br/><br/>
@@ -204,17 +170,6 @@ async getitemAPI() {
                               </div>
                               <div className="col-sm-3">
                                 <div className="be-vidget back-block mb-4 btn-right">
-
-
-                              {/* <FacebookShareButton
-                                 url={`${window.location.href}`}
-                                 quote="testing"
-                                 className="Demo__some-network__share-button mt-2">
-                                 <FacebookIcon
-                                    size={32}
-                                    round />
-                              </FacebookShareButton> &nbsp; */}
-
                                       <a className="btn full btn-primary size-1 hover-2" onClick={this.loginCheck.bind(this)} >Create Your Own NFTs</a>
                                 </div>
                               </div>
@@ -243,9 +198,7 @@ async getitemAPI() {
                         </div>
                         }
                               <Link to={item.file_type === 'video' ? '#/':`${config.baseUrl}itemdetails/${item.item_edition_id}`} className="be-img-block">
-{item.file_type === 'audio' ? 
-   <img effect="blur" src="https://ipfs.io/ipfs/QmcwrJKCnvNuxKP22TpYptN3hM76jmwL6kt4BbieBgCCba" alt="omg"/>:''
-}
+
 
       {item.file_type === 'image'  ? 
       <img effect="blur" src={`${config.imageUrl}${item.image}`} alt="omg"/>:

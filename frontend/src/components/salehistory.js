@@ -25,86 +25,12 @@ export default class salehistory extends Component {
 		this.loginData = (!Cookies.get('loginSuccess'))? [] : JSON.parse(Cookies.get('loginSuccess'));
       this.state = {
          talentStatusAPIData:'',
-         getUserBidsData:[],
          getUserPurchaseData:[],
          defaultActive:'Price',
-         BidDetailData:[],
          selectedBid:[]
 
       }
       
-this.columns = [
-   {
-       key: "Image",
-       text: "Image",
-       cell: (item) => {
-            return (
-               <Link className="weak mr-2 d-inlne-block" to={`${config.baseUrl}itemdetails/${item.item_id}`}
-               target="_blank">
-               <img src={item.image === null || item.image === '' || item.image === undefined 
-               ? 'images/team2.jpg' 
-               :
-               `${item.image}`} style={{width:'60px',height:'60px',borderRadius:'60px'}} alt=""/>
-            </Link>
-         );
-     }
-   },
-   {
-       key: "name",
-       text: "Name",
-       sortable: true,
-   },
-   {
-          key: "item_category",
-          text: "Category",
-          
-   },
-   {
-      key: "price",
-      text: "Price",
-      
-      cell: (item) => {
-         return (
-            <span>{item.price} VUL</span>
-            );
-  }
-},
-
-{
-   key: "create_date",
-   text: "Date",
-   
-},
-{
-   key: "Action",
-   text: "Action",
-   cell: (item) => {
-      return (
-         <>
-         {/* {item.status === 'Pending' ?  */}
-         <button onClick={this.getBidDetails.bind(this,item)} data-toggle="modal" data-target="#myModal" className="btn btn-primary">View bid</button>
-         
-      {/* } */}
-         </>
-   );
-}
-},
-]
-
-
-this.config = {
-   page_size: 10,
-   length_menu: [10, 20, 50],
-   show_filter: true,
-   show_pagination: true,
-   pagination: 'advance',
-   button: {
-            excel: false,
-            print: false
-      }
-   }
-
-
 this.columns1 = [
    {
        key: "Image",
@@ -179,7 +105,6 @@ this.columns1 = [
             
    componentDidMount() {
       this.talentStatusAPI()
-      this.getBidListAPI()
       this.getUserPurchaseAPI()
       if(Cookies.get('paymentFor')){
       this.setState({
@@ -189,50 +114,6 @@ this.columns1 = [
    }
       
    }
-
-   //=======================================  Bid details  =====================
-
-async getBidListAPI() {
-   await axios({
-      method: 'post',
-      url: `${config.apiUrl}myBidItem`,
-      data: { "user_id": this.loginData.data.id }
-   })
-      .then(result => {
-         if (result.data.success === true) {
-            this.setState({
-               getUserBidsData: result.data.response,
-               
-            })
-            
-         }
-         else if (result.data.success === false) {
-         }
-      }).catch(err => {
-      });
-   }
-
-
-   async getBidDetails(item){
-      await axios({
-         method: 'post',
-         url: `${config.apiUrl}getBidDetail`,
-         data: { "user_id": this.loginData.data.id,"item_edition_id":item.item_edition_id }
-      })
-         .then(result => {
-            if (result.data.success === true) {
-               this.setState({
-                  BidDetailData: result.data.response,
-                  selectedBid:item,
-                  
-               })
-            }
-            else if (result.data.success === false) {
-            }
-         }).catch(err => {
-         });
-      }
-      //=======================================  Bid details  =====================
 
 async getUserPurchaseAPI() {
    await axios({
@@ -420,66 +301,7 @@ async approveBid(id) {
                               
                            </div>
                         </div>
-                        <div className={`tab-info ${(this.state.defaultActive!=='Price')?'active':''}`}>
-                           <div className="row">
-                              <div className="col-ml-12 col-xs-12 col-sm-12" style={{marginTop:'-25px'}}>
-                                 <div className="">
-                                 {this.state.getUserBidsData.length === 0 ? 
-                                       <div class="col-sm-12 background-shadow p-5">
-                              
-                                       <div class="row">
-                                           <div class="col-sm-12 text-center">
-                                               <h5 class="weak">You don't have any collected creations available for Bid.</h5>
-                                           </div>
-                                       </div>
-                                       
-                                   </div>:                     
-                                 <ReactDatatable
-                  config={this.config}
-                  records={this.state.getUserBidsData}
-               columns={this.columns}/> }
 
-
-					                    {/* <table className="table mt-md-4 mt-0" style={{minWidth: "650px"}}>
-					                      <thead className="thead-light">
-					                        <tr className="">
-                                          <th>Image</th>
-                                          <th>Name</th>
-					                            <th className="w-10 text-center">Creation</th>
-					                            <th className="w-20">Bid Amount</th>
-					                            <th className="w-15">Bid Type</th>
-					                            <th className="w-20">Date</th>
-					                            <th className="w-10">Status</th>					                        </tr>
-					                      </thead>
-					                      <tbody>
-					                            {this.state.getUserBidsData.map(item => (
-
-					                            <tr>
-					                                <td>
-                                               <img src={item.image === null || item.image === '' || item.image === undefined 
-                                             ? 'images/team2.jpg' 
-                                             :
-                                             `${config.imageUrl}${item.image}`} style={{width:'100px',height:'98px'}} alt=""/></td>
-                                                  
-                                                
-					                                <td>{item.full_name}</td>
-					                                <td>{item.nft_datetime}</td>
-					                                <td>$ {item.bid_price}</td>
-					                                <td>{item.bid_type}</td>
-					                                <td>{item.bid_datetime}</td>
-					                                <td>{item.status}</td>
-					                               
-					                            </tr>
-                                           ))}
-					                            
-					                      </tbody>
-					                    </table> */}
-                                 </div>
-                              </div>
-                              
-                           </div>
-                        </div>
-                        
                      </div>
                   </div>
                </div>
@@ -487,54 +309,6 @@ async approveBid(id) {
          </div>
       </div>
       <br/><br/>
-
-            
-
-
-<div className="modal" id="myModal">
-<div className="modal-dialog" style={{overflow:'hidden',width:'700px'}}>
-  <div className="modal-content">
-    <div className="modal-header">
-      <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h4 className="modal-title">Bid details of <b>{this.state.selectedBid.name}</b></h4>
-    </div>
-    <div className="modal-body">
-      <table className="table table-striped table-hover">
-          <thead>
-          </thead>
-          <tbody >
-              <tr>
-                  <th>Bid ID</th>
-                  <th>User Name</th>
-                  <th>Bid Price</th>
-                  <th>Date</th>
-                  <th>Action</th>
-              </tr>
-              {(this.state.BidDetailData.length==0)?
-               <tr>
-                  <td colSpan="4">No records found.</td>
-               </tr>
-              :
-              this.state.BidDetailData.map((item,i)=>(
-               <tr>
-                     <td>{item.bid_id}</td>
-                     <td>{item.user_name}</td>
-                     <td>$ {item.bid_price}</td>
-                     <td>{(item.datetime.replace('.000Z','')).replace('T',' ')}</td>
-                     <td><button data-dismiss="modal" aria-hidden="true" type="button" onClick={this.approveBid.bind(this,item)} className="btn btn-sm btn-primary">Approve Bid</button></td>
-               </tr>
-            ))} 
-          </tbody>
-      </table>
-    </div>
-    {/* <div className="modal-footer">
-      <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-    </div> */}
-  </div>
-</div>
-</div>
-
-
                                    
       </body>
              <Footer/>

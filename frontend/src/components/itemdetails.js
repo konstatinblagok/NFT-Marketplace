@@ -16,7 +16,7 @@ import ReactDatatable from '@ashvin27/react-datatable'
 import { TwitterShareButton, TwitterIcon, FacebookShareButton, FacebookIcon, EmailIcon, EmailShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
 import {loadStripe} from '@stripe/stripe-js';
 import {Elements} from '@stripe/react-stripe-js';
-import { CheckoutForm } from '../components/CheckoutForm';
+// import { CheckoutForm } from '../components/CheckoutForm';
 import Countdown,{zeroPad} from 'react-countdown';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { Player } from 'video-react';
@@ -75,9 +75,7 @@ constructor(props) {
       TokenBalnce:0,
    }
    this.onChange = this.onChange.bind(this)
-   this.submitBid = this.submitBid.bind(this)
-   this.approvalAPI = this.approvalAPI.bind(this)
-   this.paymentPay = this.paymentPay.bind(this)
+   // this.paymentPay = this.paymentPay.bind(this)
    this.purchaseNft = this.purchaseNft.bind(this) 
    this.getTokenBalnce = this.getTokenBalnce.bind(this);               
 
@@ -184,13 +182,8 @@ setTimeout(() => {
       
    }   
 }, 1000);
-// if(this.loginData?.data?.id != this.state.getListItem?.user_id ){
-//    this.itemViewsAPI()
-// }
+
 }
-
-
-
 
 async connectMetasmask() {
    if (window.ethereum) {
@@ -262,54 +255,6 @@ this.setState({
    })
 }
 
-//===================================   give approval    =============================
-
-async approvalAPI() {
-   this.setState({
-      cryptoPayBtnDesable:true,
-   })
-   if(this.loginData.length === 0){
-      window.location.href = `${config.baseUrl}login`
-   }
-   else{
-     
-      if( parseFloat(this.state.bid_price) < parseFloat(this.state.getListItem?.max_bid)){
-         this.setState({
-            cryptoPayBtnDesable:false,
-            ErrorMessage:'Bid price should be greater than '+ this.state.getListItem?.max_bid
-           })
-      }
-      else{
-         Cookies.set('purchase_item_id',this.id)
-
-         Cookies.set('paymentFor',this.state.getListItem?.sell_type_name);
-         let bid_price;
-         if(this.state.getListItem?.sell_type_name === 'Price'){
-               bid_price = (parseFloat(this.state.getListItem?.price) + parseFloat(this.state.getUsdBalance?.txn_fee_usd))
-         }
-         else{
-            bid_price = this.state.bid_price
-         }
-         await axios({
-            method: 'post',
-            url: `${config.apiUrl}onlinetrx_start`,
-            headers: { "Authorization": this.loginData?.Token },
-            data: { "email":this.loginData.data.user_email,"user_address":this.state.ConnectWalletAddress,"sell_type":this.state.getListItem?.sell_type_name, "item_edition_id": this.id,'item_id':this.state.getListItem?.item_id ,'user_id':this.loginData.data.id,'amount': bid_price}
-         })
-            .then(result => {
-               if (result.data.success === true) {
-                  
-                  window.location.href = `https://merchant.net-cents.com/widget/payment/currencies?data=${result.data.token}` 
-               }
-               else if (result.data.success === false) {
-               }
-            }).catch(err => {
-            });
-         }
-   }
-   }
-
-      //=======================================  Like details  =====================
 
 async itemViewsAPI() {
    await axios({
@@ -348,97 +293,6 @@ async getItemLikeCountsAPI() {
       }).catch(err => {
       });
    }
-
-//=======================================  Submit Bid  =====================
-
-async submitBid() {
-if(this.loginData.length === 0){
-   window.location.href = `${config.baseUrl}login`
-}
-else{
-   if( parseFloat(this.state.bid_price) < parseFloat(this.state.getListItem?.max_bid)){
-      toast.error('Bid price should be greater than '+ this.state.getListItem?.max_bid, {
-         position: toast.POSITION.TOP_CENTER , 
-         })
-   }
-   else{
-      let bid_price;
-      if(this.state.getListItem?.sell_type_name === 'Price'){
-            bid_price = this.state.getListItem?.price
-      }
-      else{
-         bid_price = this.state.bid_price
-      }
-      await axios({
-         method: 'post',
-         url: `${config.apiUrl}insertBid`,
-         headers: { "Authorization": this.loginData?.Token },
-         data: { "email":this.loginData.data.user_email,"item_edition_id": this.id,'bid_price':bid_price,'user_id':this.loginData.data.id }
-      })
-         .then(result => {
-            if (result.data.success === true) {
-               toast.success(result.data.msg, {
-                  position: toast.POSITION.TOP_CENTER , 
-                  })
-                  window.location.reload()
-            }
-            else if (result.data.success === false) {
-            }
-         }).catch(err => {
-         });
-      }
-      }
-}
-
-
-
-async paymentPay() {
-   if(this.loginData.length === 0){
-      window.location.href = `${config.baseUrl}login`
-   }
-   else{
-      if( parseFloat(this.state.getwalletDetails.balance) < parseFloat(this.state.getListItem?.price)){
-         toast.error('Insufficient balance for purchase bid', {
-            position: toast.POSITION.TOP_CENTER , 
-            })
-      }
-      else{
-         var nftid = this.state.getListItem?.item_id
-         var totalBalance = this.state.getwalletDetails?.balance
-         var nftAmount = this.state.getListItem?.price
-
-         var remainingAmount = parseInt(totalBalance) - parseInt(nftAmount)
-
-         await axios({
-            method: 'post',
-            url: `${config.apiUrl}purchaseNft`,
-            headers: { "Authorization": this.loginData?.Token },
-            data: { "nftid":nftid, "toAddress" : this.state.getwalletDetails?.public, 'remainingAmount' : remainingAmount, 'user_id':this.loginData?.data?.id, 'amount' : this.state.getListItem?.price, 'item_edition_id' : this.state.getListItem?.item_edition_id, 'seller_id' : this.state.getListItem?.user_id  }
-         })
-            .then(result => {
-               if (result.data.success === true) {
-                  toast.success(result.data.msg, {
-                     position: toast.POSITION.TOP_CENTER , 
-                     })
-                     setTimeout(() => {
-                        window.location.reload()
-                     }, 3000);                     
-               }
-               else if (result.data.success === false) {
-                  toast.err(result.data.msg, {
-                     position: toast.POSITION.TOP_CENTER , 
-                     })                  
-               }
-            }).catch(err => {
-               toast.error("Error occured!!", {
-                  position: toast.POSITION.TOP_CENTER
-                  })               
-            });
-         }
-         }
-   }
-
-   //=======================================  Item details  =====================
 
 async itemDetailsAPI() {
    this.setState({
@@ -746,7 +600,7 @@ async getTokenBalnce(){
 
 
 render() {
-   // console.log('getImage1',this.state.getImage1)
+
    return (    
 
       <>
@@ -798,16 +652,12 @@ render() {
                                     {/* {alert(this.state.getImage1.length)} */}
 
                                     {this.state.getImage1.length === 1 ?
-                                       // <Link to={`${config.baseUrl}ipfs/${this.state.getListItem?.image_original}`} target="_blank">
                                        <>
-                                          {/* <div className="soldOut">
-                              <img src="images/sold.png"/>
-                           </div> */}
                            {console.log(this.state.getListItem)}
 
                            {this.state.getListItem?.image === undefined || this.state.getListItem?.image === '' || this.state.getListItem?.image === null ? '' :
                                                          this.state.getListItem?.file_type === 'image' ?
-                                                            // <Link  to={`${config.baseUrl}ipfs/${this.state.getListItem?.image}`} target="_blank">
+                         
                                                             <ModalImage
                                              small={`${config.imageUrl}${this.state.getListItem?.image}`}
                                              large={`${config.imageUrl}${this.state.getListItem?.image}`}
@@ -836,10 +686,8 @@ render() {
                                        :
                                        this.state.getImage1.length > 1 ?
                                           <div className="head-bg">
-                                             <div id="myCarousel" className="carousel slide realstateslider" data-ride="carousel">
-                                                {/* <!-- Indicators --> */}
+                                             {/* <div id="myCarousel" className="carousel slide realstateslider" data-ride="carousel">
                                                 <ol className="carousel-indicators">
-
                                                    {this.state.getImage1[0]?.image === undefined || this.state.getImage1[0]?.image === null || this.state.getImage1[0]?.image === '' ? '' :
                                                       <li data-target="#myCarousel" data-slide-to="0" className="active"></li>
                                                    }
@@ -881,15 +729,15 @@ render() {
                                                 </ol>
 
 
-                                                {/* <!-- Wrapper for slides --> */}
+                
                                                 <div className="carousel-inner">
 
                                                    <div className="item active" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
                                                       {this.state.getImage1[0]?.image === undefined || this.state.getImage1[0]?.image === '' || this.state.getImage1[0]?.image === null ? '' :
                                                          this.state.getImage1[0]?.file_type === 'image' ?
-                                                            // <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[0]?.image}`} target="_blank">
+                                                        
                                                             <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[0]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
-                                                            //  </Link> 
+                                                         
                                                             :
                                                             this.state.getImage1[0]?.file_type === 'video' ?
                                                                <a href={`${config.imageUrl}${this.state.getImage1[0]?.image}`} target="_blank">
@@ -911,45 +759,41 @@ render() {
 
                                                    {this.state.getImage1[1]?.image === undefined || this.state.getImage1[1]?.image === '' || this.state.getImage1[1]?.image === null ? '' :
                                                       <div className="item" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
-                                                         {/* <img effect="blur"  src="images/imgpsh_fullsize_anim.jpg" alt="Los Angeles" style={{width:"100%",height: '450px'}}/> */}
-
-                                                         {/* <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[1]?.image}`} target="_blank"> */}
+                                                   
 
                                                          <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[1]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
 
-                                                         {/* </Link> */}
+                                         
                                                       </div>
 
                                                    }
 
                                                    {this.state.getImage1[2]?.image === undefined || this.state.getImage1[2]?.image === '' || this.state.getImage1[2]?.image === null ? '' :
                                                       <div className="item" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
-                                                         {/* <img effect="blur"  src="images/imgpsh_fullsize_anim.jpg" alt="Los Angeles" style={{width:"100%",height: '450px'}}/> */}
-                                                         {/* <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[2]?.image}`} target="_blank"> */}
+                                              
 
                                                          <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[2]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
-                                                         {/* </Link> */}
+                                                  
                                                       </div>
 
                                                    }
 
                                                    {this.state.getImage1[3]?.image === undefined || this.state.getImage1[3]?.image === '' || this.state.getImage1[3]?.image === null ? '' :
                                                       <div className="item" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
-                                                         {/* <img effect="blur"  src="images/imgpsh_fullsize_anim.jpg" alt="Los Angeles" style={{width:"100%",height: '450px'}}/> */}
-                                                         {/* <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[3]?.image}`} target="_blank"> */}
+                                        
 
                                                          <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[3]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
-                                                         {/* </Link> */}
+                                             
                                                       </div>
 
                                                    }
 
                                                    {this.state.getImage1[4]?.image === undefined || this.state.getImage1[4]?.image === '' || this.state.getImage1[4]?.image === null ? '' :
                                                       <div className="item" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
-                                                         {/* <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[4]?.image}`} target="_blank"> */}
+                                        
 
                                                          <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[4]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
-                                                         {/* </Link> */}
+                                                  
                                                       </div>
 
                                                    }
@@ -957,50 +801,47 @@ render() {
 
                                                    {this.state.getImage1[5]?.image === undefined || this.state.getImage1[5]?.image === '' || this.state.getImage1[5]?.image === null ? '' :
                                                       <div className="item" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
-                                                         {/* <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[5]?.image}`} target="_blank"> */}
+                                              
 
                                                          <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[5]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
-                                                         {/* </Link> */}
+                                                  
                                                       </div>
 
                                                    }
 
                                                    {this.state.getImage1[6]?.image === undefined || this.state.getImage1[6]?.image === '' || this.state.getImage1[6]?.image === null ? '' :
                                                       <div className="item" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
-                                                         {/* <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[6]?.image}`} target="_blank"> */}
+                                        
 
                                                          <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[6]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
-                                                         {/* </Link> */}
+                                             
                                                       </div>
 
                                                    }
 
                                                    {this.state.getImage1[7]?.image === undefined || this.state.getImage1[7]?.image === '' || this.state.getImage1[7]?.image === null ? '' :
                                                       <div className="item" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
-                                                         {/* <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[7]?.image}`} target="_blank"> */}
-
+                                    
                                                          <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[7]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
-                                                         {/* </Link> */}
+                                            
                                                       </div>
 
                                                    }
 
                                                    {this.state.getImage1[8]?.image === undefined || this.state.getImage1[8]?.image === '' || this.state.getImage1[8]?.image === null ? '' :
                                                       <div className="item" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
-                                                         {/* <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[8]?.image}`} target="_blank"> */}
-
+                                
                                                          <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[8]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
-                                                         {/* </Link> */}
+                                                    
                                                       </div>
 
                                                    }
 
                                                    {this.state.getImage1[9]?.image === undefined || this.state.getImage1[9]?.image === '' || this.state.getImage1[9]?.image === null ? '' :
                                                       <div className="item" style={{ cursor: 'pointer' }} onClick={this.multiImageOnModal.bind(this)}>
-                                                         {/* <Link  to={`${config.baseUrl}ipfs/${this.state.getImage1[9]?.image}`} target="_blank"> */}
-
+                                          
                                                          <img effect="blur" src={`${config.imageUrl}${this.state.getImage1[9]?.image}`} alt="Los Angeles" style={{ width: "100%", height: '450px' }} />
-                                                         {/* </Link> */}
+                                                       
                                                       </div>
 
                                                    }
@@ -1011,7 +852,7 @@ render() {
 
                                                 </div>
 
-                                                {/* <!-- Left and right controls --> */}
+                  
                                                 <a className="left carousel-control" href="#myCarousel" data-slide="prev">
                                                    <span className="fa fa-chevron-left"></span>
                                                    <span className="sr-only">Previous</span>
@@ -1020,30 +861,11 @@ render() {
                                                    <span className="fa fa-chevron-right"></span>
                                                    <span className="sr-only">Next</span>
                                                 </a>
-                                             </div>
+                                             </div> */}
 
                                           </div>
                                           : ''
                                     }
-
-
-
-
-                                    {/* {this.state.getListItem?.file_type === 'audio' ? 
-                                             <img src="https://ipfs.io/ipfs/QmcwrJKCnvNuxKP22TpYptN3hM76jmwL6kt4BbieBgCCba" style={{width:'100%',height:'341px',objectFit: 'fill'}} alt="omg"/>:''
-                                       }
-                                       
-                                                {this.state.getListItem?.file_type === 'image'  ? 
-                                               <img src={`${config.imageUrl}${this.state.getListItem?.image}`} style={{width:'100%',height:'341px',objectFit: 'fill'}} className="img-responsive pr-5 pad-right"/>:
-                                                this.state.getListItem?.file_type === 'video' ? 
-                                                <Player className="preview_image_data" src={`${config.imageUrl}${this.state.getListItem?.image}`} style={{width:'100%',height:'341px',objectFit: 'fill'}}/> :
-                                                this.state.getListItem?.file_type === 'audio' ? 
-                                                <ReactAudioPlayer
-                                                   src={`${config.imageUrl}${this.state.getListItem?.image}`} style={{width:'100%'}}
-                                                    
-                                                   controls
-                                                   /> :''
-                                             } */}
 
 
                                  </div>
@@ -1092,15 +914,6 @@ render() {
                               
                            }
 
-
-
-                              {/* <button type="submit" 
-                              disabled={this.state.getListItem?.nft_type === 'Upcoming' || this.state.getListItem?.is_sold === 1 || this.state.getListItem?.user_id == this.loginData?.data?.id} className="offer-button text-white btn color-1 size-2 col-sm-12" data-toggle="modal" data-target="#myModal" >
-                              {this.state.getListItem?.sell_type_name === 'Price' ? 
-                           "Purchase":"Place Bid"
-                        }
-                                 
-                                 </button> */}
                              
                            </div>
                            <br/>
@@ -1130,8 +943,7 @@ render() {
                                      
                                      <i className="fa fa-heart" style={{color:this.state.likeCount?.is_liked === 0 ? '' : 'blue'}}></i> {this.state.likeCount?.count}</span>
                                   <span><i className="fa fa-eye"></i> {this.state.getListItem?.view_count}</span>
-                                  {/* <span data-toggle="modal" data-target="#productShareSheet"><i className="fa fa-share-alt"></i> Share</span> */}
-                                  {/* <span><i className="fa fa-share-alt"></i> Share</span> */}
+             
                                 </div>
                             
                         </div>
@@ -1171,15 +983,6 @@ render() {
                                                   </span>
                                               </span>
                                           </div>
-
-                                          {/* <div className="col-sm-12" style={{paddingTop: "1em"}}>
-                                              <span className="h6" style={{color:'#fff'}}>Edition:</span>
-                                              <span className="ml-1 h7">
-                                                  <span id="authenticity_url" href="#" className="secondary_text">
-                                                      <strong id="edition_count">{this.state.getListItem?.edition_text}</strong>
-                                                  </span>
-                                              </span>
-                                          </div> */}
 
                                           <div className="col-sm-12" style={{paddingTop: "1em"}}>
                                               <span className="h6" style={{color:'#fff'}}>Expire:</span>
@@ -1236,13 +1039,7 @@ render() {
 
                                       </div>
                                   </div>
-                                  {/* <div className="col-2 col-lg-1">
-                                      <a href="#" className="learn-more-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="This is a signed and limited edition digital creation by David McLeod.">
-                                          
-                                              <img className="poa_icon" height="50" width="50" src="https://makersplace.com/static/img/products/authenticity.png"/>
-                                          
-                                      </a>
-                                  </div> */}
+           
                                   <img style={{width:'44px',height:'47px',position:'absolute',filter: 'invert(1)',right:'0',bottom:'-47px'}} src="https://makersplace.com/static/img/products/ribbon-corner.png"/>
 
                               </div>
@@ -1254,86 +1051,6 @@ render() {
                   </div>
                </div>
             </div>
-
-
-
-
-
-   {/* <div className="container-fluid custom-container upcomming-drops" id="upcomming-drops">
-      <ToastContainer/>
-         <div className="container">
-            <div className="row">
-               <div className="col-md-6 ">
-                  <img style={{width:'555px',height:'363px'}} src={`${config.imageUrl}${this.state.getListItem?.image}`} className="img-responsive"/>
-               </div>
-               <div className="col-md-6">
-                  <div className="row">
-                     <div className="col-md-10">
-                        <h3 id="digital_media_title" style={{marginLeft:'-12px'}}>{this.state.getListItem?.category_name} - {this.state.getListItem?.name}</h3>
-                     </div>
-
-                     <div className="col-md-2">
-                
-
-                     <div className="be-drop-down login-user-down share-dropdown" onClick={this.socialIcon.bind(this,this.state.socialIconData === ''?'1':'0')}>
-                     
-                     <span className="be-dropdown-content"> <i className="fa fa-share-alt"></i>&nbsp; Share</span>
-                    <div className="drop-down-list a-list" style={{display:this.state.socialIconData === ''? "none":"block",padding:'8px',marginLeft:'-98px',marginTop:'7px'}}>
-                    <TwitterShareButton
-                                    url={this.state.getListItem?.name}
-
-                                    className="Demo__some-network__share-button">
-                                    <TwitterIcon
-                                        size={32}
-                                        round />
-                                </TwitterShareButton>                             
-                               
-                                            <FacebookShareButton
-                                    url={`${config.imageUrl}${this.state.getListItem?.image}`}
-                                    quote={this.state.getListItem?.name}
-                                    className="Demo__some-network__share-button">
-                                    <FacebookIcon
-                                        size={32}
-                                        round />
-                                </FacebookShareButton>
-                                <EmailShareButton
-                                    url={this.state.getListItem?.name}
-                                    title={this.state.getListItem?.name}
-                                    className="Demo__some-network__share-button">
-                                    <EmailIcon
-                                        size={32}
-                                        round />
-                                </EmailShareButton>
-                  
-              </div>
-              
-              </div>
-                     </div>
-                  </div>
-                  <div className="row purchase-wrapper">
-                     <div className="col-12 mt-md-2 mt-3 mb-3">
-                        <button type="submit" className="offer-button btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" >
-                           {this.state.getListItem?.sell_type_name === 'Price' ? 
-                           "Buy":"Place Bid"
-                        }
-                           
-                        </button>
-                        
-                     </div>
-                     <a href="javascript:void(0)" onClick={this.scollREcent.bind(this)}>View Recent Offer</a>
-                  </div>
-                  <div className="row mt-4"><div className="col-12"><h5 className="text-white strong mb-3">Description:</h5></div><div className="col-12 mt-2"><p className="text-white">{this.state.getListItem?.description}</p></div></div>
-                  <div className="row mt-4"><div className="col-12"><h5 className="text-white strong mb-3">Price : $ {this.state.getListItem?.price}</h5></div></div>
-                  <div className="row mb-3"><div className="col-12"><h5 className="text-white strong">Owner : {this.state.getListItem?.owner}</h5></div></div>
-                  <a href={this.state.getListItem?.token_hash} target="_blank" style={{marginLeft:'-15px'}}>
-                           View Blockchain
-                           </a>
-                 
-               </div>
-            </div>
-         </div>
-      </div>
-       */}
       <br/>
       <br/>
       <div className="container-fluid custom-container ">
@@ -1352,50 +1069,6 @@ render() {
                   records={this.state.getBidDetailData}
                columns={this.columns}/>
                                        
-                     {/* <table className="table mb-0" >
-                        <thead className="thead-light super-light">
-                           <tr>
-                              <th className="w-20">Owner</th>
-                              <th className="w-15">Details</th>
-                              <th className="w-15">Buy / Make an Offer</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                           {this.state.getBidDetailData.length === 0 ? <tr className="text-center"><td  colspan="6">No Bid placed yet</td></tr>:
-                           this.state.getBidDetailData.map(item => (
-                           <tr className="product-owner">
-                              <td className="w-20 text-truncate" valign="center">
-                                 <Link className="weak mr-2 d-inlne-block" to={`${config.baseUrl}featurescreator/${item.user_id}`}
-                                  target="_blank">
-                                 <img src={item.profile_pic === null || item.profile_pic === '' || item.profile_pic === undefined 
-                                 ? 'images/noimage.png' 
-                                 :
-                                 `${config.imageUrl1}${item.profile_pic}`} className="profile_picture x-small"
-                                 style={{height:'36px',width:'36px'}} alt=""/>
-                                 </Link>
-                                 <div className="ml-1 mt-2 d-inline-block" style={{maxWidth: '150px', overflowX: 'hidden', textOverflow: 'ellipsis', marginBottom: '-7px'}}>
-                                    <Link to={`${config.baseUrl}featurescreator/${item.user_id}`} target="_blank" className="heavy strong" mptrackaction="product:activity:collector_name">
-                                    {item.user_name}
-                                    </Link>
-                                 </div>
-                              </td>
-                              
-                              <td className="w-20">
-                                 Bid for
-                                 <strong> $ {item.bid_price}</strong>
-                                 <br/>
-                                 <span className="d-block" style={{fontSize: ".8em"}}>
-                                 {item.datetime}
-                                 </span>
-                              </td>
-                              <td className="w-10">
-                                 <span className="float-left" style={{fontSize:"1em"}}>Bid offers</span>
-                              </td>
-                              </tr>
-                              ))}
-                           </tbody>
-                     </table>
-               */}
                   </div>
                </div>
             </div>
@@ -1505,7 +1178,6 @@ data-backdrop="false">
                                                    controls
                                                    />:''               
                                              }
-                           {/* <img src={`${config.imageUrl}${this.state.getListItem?.image}`} style={{width: "100%"}}/> */}
                         </div>
                      </div>
                   </div>
@@ -1516,119 +1188,17 @@ data-backdrop="false">
                         <h4 className="strong payment-method-options">Offer Method</h4>
                      </div>
                      <div className="tab-wrapper style-1">
-                        {/* <div className="tab-nav-wrapper">
-                           <div className="nav-tab  clearfix">
-                           <div className={this.state.etherClickActive == 0 ? "nav-tab-item active" : "nav-tab-item"} onClick={this.etherClick.bind(this,'cc')}>
-                        <span>Credit Card</span>
-                     </div>
-                     <div className={this.state.etherClickActive == 1 ? "nav-tab-item active" : "nav-tab-item"} onClick={this.etherClick.bind(this,'Ether')}>
-                        <span className="text-black">Crypto</span>
-                     </div>
-                           </div>
-                        </div> */}
+
                         <div className="tabs-content clearfix">
-                           <div className={this.state.etherClickActive == 0 ? "tab-info" : "tab-info active"} style={{display: this.state.etherClickActive == 0 ? 'none' :'block' }}>
-                              <div className="row">
-                                 <div className="col-ml-12 col-xs-12 col-sm-12">
-                                    {/* <div className="col-12 mt-3">
-                                       {this.state.getListItem?.sell_type_name === 'Price' ? 
-                                       <strong>Price : {this.state.getUsdBalance?.price_eth} ETH ~ ${this.state.getListItem?.price} <br/>
-                                        Gas fee : {this.state.getUsdBalance?.txn_fee_eth} ETH ~ ${this.state.getUsdBalance?.txn_fee_usd} <br/>
-                                        Total payable : {parseFloat(parseFloat(this.state.getUsdBalance?.price_eth) + parseFloat(this.state.getUsdBalance?.txn_fee_eth)).toFixed(6)} ETH ~ ${parseFloat(parseFloat(this.state.getListItem?.price) + parseFloat(this.state.getUsdBalance?.txn_fee_usd)).toFixed(2)}</strong>:   
-                                       <strong>Your offer must be at least: $ {this.state.getListItem?.max_bid}</strong>
-                                    }
-                                    </div> */}
-
-                           <div className="col-12 mt-3">
-                           {this.state.getListItem?.sell_type_name === 'Price' ? 
-                                       <strong>
-                                          Price : ${this.state.getListItem?.price} <br/>
-                                          Token Amount: {this.state.getListItem?.price} VUL <br/>
-
-                                      </strong>:   
-                              <strong>Your offer must be at least: $ {this.state.getListItem?.max_bid}</strong>}
-                           </div> 
-
-                                    <div className="col-12 mt-3">
-                                       <div className="input-group">
-                                       {this.state.getListItem?.sell_type_name === 'Price' 
-                                          ? 
-                                          ""
-                                          :
-                                          <>
-                                          <div className="input-group-prepend" style={{backgroundColor:"#fff"}}>
-                                             <span className="input-group-text">$</span>
-                                          </div>
-                                          
-                                          <input type="number" step="any" className="form-control currency  ccbid-price" 
-                                          placeholder="Offer amount" id="bidAmountCC" name="bid_price" value={this.state.bid_price} onChange={this.onChange} required="" onKeyDown={ this.formatInput }/>
-                                          </>
-                                       }
-                                       
-                                       </div>
-                                    </div>
-                                    <div className="col-12 mt-3">
-                                       <div className="input-group">
-                                          <input type="text" step="any" className="form-control " placeholder="Name"  name="bid_amount" required=""/>
-                                       </div>
-                                    </div>
-
-                                    <Elements stripe={stripeTestPromise}>
-                                    <CheckoutForm user_address={this.state.ConnectWalletAddress} amount={this.state.getListItem?.sell_type_name === 'Price' ? (parseFloat(this.state.getListItem?.price) + parseFloat(this.state.getUsdBalance?.txn_fee_usd)): this.state.bid_price}
-                                    itemData={[this.id,this.loginData?.data?.id,this.state.getListItem?.sell_type_name,this.state.getListItem?.max_bid,this.state.getListItem?.item_id,this.loginData?.Token,this.loginData.data?.user_email]}
-                                    />
-                                    </Elements>
-
-                                    {/* <div className="col-12 mt-3">
-                                       <div className="input-group">
-                                          <input type="text" step="any" className="form-control "
-                                           placeholder="Credit card no"  name="ccn" required=""/>
-                                       </div>
-                                    </div>
-
-                                    <div className="row">
-                                       <div className="col-sm-8 mt-3 mb-2">
-                                       <div className="input-group">
-                                          <input type="date" step="any" className="form-control datepicker " placeholder="12/11/1997" name="Date" required=""/>
-                                       </div>
-                                    </div>
-                                    <div className="col-sm-4 mt-3 mb-2">
-                                       <div className="input-group">
-                                          <input type="number" step="any" className="form-control " placeholder="CVV" name="ccn" required=""/>
-                                       </div>
-                                    </div>
-                                    </div>
-
-                                    <div className="col-12 text-right mt-1">
-                                       <label className="form-check-label">
-                                       <input type="checkbox" className="mr-2 remember_card_checkbox" name="remember_card" checked=""/>
-                                       Save for future use.
-                                       </label>
-                                    </div> */}
-                                    {/* <div className="col-12 mt-3">
-                                       <button  type="submit" className="btn btn-primary col-sm-12 size-1 " onClick={this.submitBid} >Make Offer</button>
-                                    </div> */}
-                                 </div>
-                              </div>
-                           </div>
+                     
                            <div class={this.state.etherClickActive == 1 ? "tab-info" : "tab-info active"}  style={{display: this.state.etherClickActive == 1 ? 'none' :'block' }}>
-                           {/* <div className="col-12 mt-3">
-                           {this.state.getListItem?.sell_type_name === 'Price' ? 
-                                       <strong>Price : {this.state.getUsdBalance?.price_eth} ETH ~ ${this.state.getListItem?.price} <br/>
-                                       Gas fee : {this.state.getUsdBalance?.txn_fee_eth} ETH ~ ${this.state.getUsdBalance?.txn_fee_usd} <br/>
-                                       Total payable : {parseFloat(parseFloat(this.state.getUsdBalance?.price_eth) + parseFloat(this.state.getUsdBalance?.txn_fee_eth)).toFixed(6)} ETH ~ ${parseFloat(parseFloat(this.state.getListItem?.price) + parseFloat(this.state.getUsdBalance?.txn_fee_usd)).toFixed(2)}</strong>:   
-                              <strong>Your offer must be at least: $ {this.state.getListItem?.max_bid}</strong>}
-                           </div> */}
 
                            <div className="col-12 mt-3">
                            {this.state.getListItem?.sell_type_name === 'Price' ? 
                                        <strong>
-                                          {/* Price : ${this.state.getListItem?.price} <br/> */}
                                           Token Amount : {this.state.getListItem?.price} VUL <br/>
-                                          {/* Wallet Balance : {this.state.TokenBalnce} VUL <br/> */}
                                        </strong>:
                                        ''
-                              // <strong>Your offer must be at least: $ {this.state.getListItem?.max_bid}</strong>
                            }
                            </div>                           
                            <div className="col-12 mt-3">
@@ -1650,22 +1220,6 @@ data-backdrop="false">
                                  <div className="col-12 nopadding">
       <span style={{color:'red',fontFamily:'cursive',textAlign:'center'}}>{this.state.ErrorMessage}</span>
                                     
-                                    {/* <div className="my-3 text-center">
-                                       {(this.state.cryptoPayBtnDesable)?
-                                       <button className="btn btn-primary size-1 " title="Place Bid"
-                                       mptrackaction="nux:giveapproval" disabled>Processing...</button>   
-                                    :
-                                       this.state.getListItem?.sell_type_name === 'Price' ? 
-                                       <button className="btn btn-primary size-1 " title="Place Bid"
-                                       mptrackaction="nux:giveapproval"
-                                       onClick={this.approvalAPI}>Pay</button>:
-                                       <button className="btn btn-primary size-1 " title="Place Bid"
-                                       mptrackaction="nux:giveapproval" disabled={!this.state.bid_price}
-                                       onClick={this.approvalAPI}>Place Bid</button>   
-                                    }
-                                    
-                                    </div> */}
-
                                     <button onClick={this.purchaseNft} className="btn btn-primary size-1 " title="Pay"
                                     mptrackaction="nux:giveapproval" >Pay</button>
                                  </div>
@@ -1681,128 +1235,6 @@ data-backdrop="false">
    </div>
 </div>
 
-
-<div className="modal fade" id="productShareSheet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
-                        <div className="modal-dialog" role="document">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h5 className="modal-title" id="exampleModalLabel">Share this Creation</h5>
-                              <button type="button" className="close" data-dismiss="modal" style={{marginTop: '-23px',
-    fontSize: '26px'}} aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div className="modal-body">
-                               <div className="col-sm-12">
-                              <div className="row text-center">
-
-                                     
-    <div class="col-sm-2">
-       
-    </div>
-     <div class="col-sm-8">
-
-        <div className="row">
-
-        <div className="d-inline-block col-sm-4 col-xs-4 text-center mb-3">
-                                <FacebookShareButton
-                                url={window.location.href} 
-                                    // url={`${config.imageUrl}${this.state.getListItem?.image}`}
-                                    quote={this.state.getListItem?.name + '-' + "\n" + this.state.getListItem?.description}
-                                    
-                                    className="Demo__some-network__share-button">
-                                    <FacebookIcon  target="_blank"
-                                        size={32}
-                                        round />
-                                </FacebookShareButton>
-                                   
-                                    <br/>
-                                    <span className="mt-1 d-block">Facebook</span>
-                                </div>
-
-                                <div className="d-inline-block col-sm-4 col-xs-4 text-center mb-3 pb-1">
-                               
-                                     <TwitterShareButton
-                                     url={window.location.href} 
-                                    //  url={`${config.imageUrl}${this.state.getListItem?.image}`}
-                                     title={this.state.getListItem?.name + '-' + "\n" + this.state.getListItem?.description}
-                                    className="Demo__some-network__share-button">
-                                    <TwitterIcon
-                                        size={32}
-                                        round />
-                                </TwitterShareButton>  
-                                <br/>
-                                    <span className="mt-1 d-block">Twitter</span>
-                                </div>
-
-                             
-
-                                <div className="d-inline-block col-sm-4 col-xs-4 text-center mb-3 pb-4">
-                                  
-                                    <EmailShareButton
-                                     url={window.location.href}
-                                    
-                                     subject={"Check out this Rare Digital Art Work from Infinity 8" + "\n" + this.state.getListItem?.name + '-' + "\n" + this.state.getListItem?.description}
-                                     body={"hey there, pls share my link" + <a href={window.location.href}></a>}
-                                     className="Demo__some-network__share-button">
-                                    <EmailIcon
-                                        size={32}
-                                        round />
-                                </EmailShareButton>
-                                <br/> 
-                                    <span className="mt-1 d-block">Email</span>
-                                </div>
-
-                             
-        </div>
-     </div>
-     <div class="col-sm-2"></div>
-                                    
-
-                        
-                         
-
-                                
-
-                            </div>
-                           </div>
-                            <div className="row text-center">
-                               <div className="col-sm-3"></div>
-                            <div className="d-inline-block col-sm-3 col-xs-6 text-center mb-3 pb-1">
-                                <WhatsappShareButton
-                                     url={window.location.href}
-                                    title={this.state.getListItem?.name + '-' + "\n" + "Check out this Rare Digital Art Work from Infinity 8" + "\n" + this.state.getListItem?.description + "\n" }
-                                    className="Demo__some-network__share-button">
-                                    <WhatsappIcon
-                                        size={32}
-                                        round />
-                                </WhatsappShareButton>
-                                <br/>
-                                    <span className="mt-1 d-block">WhatsApp</span>
-                                </div>
-                                <div className="d-inline-block col-sm-3 col-xs-6 text-center mb-3 pb-1" style={{margin:'-13px'}}>
-                                   
-                                    <br/>
-                                    <CopyToClipboard text={window.location.href}
-          onCopy={() => this.setState({copied: true})}>
-                                <img src="images/copy-link.png" style={{cursor:'pointer'}} className="link-copy"/>
-          {/* <span>Copy to clipboard with span</span> */}
-        </CopyToClipboard>
-        {this.state.copied ? <span className="mt-1 d-block">Copied!</span> : <span className="mt-1 d-block">Copy link</span>}
-
-                                    {/* <span className="mt-1 d-block">Copy link</span> */}
-                                </div>
-                                <div className="col-sm-3"></div>
-    
-
-                            </div>
-                           
-                           
-                            </div>
-                            
-                          </div>
-                        </div>
-                      </div>
 
 
     </>

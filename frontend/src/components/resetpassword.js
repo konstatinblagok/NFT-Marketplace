@@ -143,16 +143,7 @@ export default class resetpassword extends Component {
            <button style={{cursor:"not-allowed"}} disabled className="login100-form-btn" type="submit" name="Request Resent Link" >Update Password</button>
            : <button className="login100-form-btn" type="submit"  name="Request Resent Link" >Update Password </button>}
           </div>
-          {/* <div className="flex-sb-m w-full p-t-3 p-b-32 mt-2">
-          
-            
-             <div>
-              <div href="#" className="txt1 mt-2">
-                Don't have an account? <a href="#">Sign up</a>
-              </div>
-            </div> 
-          </div> */}
-          
+
     </form>
       </div>
     </div>

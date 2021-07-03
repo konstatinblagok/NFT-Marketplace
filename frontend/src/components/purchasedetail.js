@@ -6,15 +6,7 @@ import config from '../config/config'
 import Cookies from 'js-cookie';
 
 import { Link } from 'react-router-dom';
-// import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
-import ReactDatatable from '@ashvin27/react-datatable'
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-import Swal from 'sweetalert2';
-const headers = {
-   'Content-Type': 'application/json'
-};
+
 
 export default class purchasedetail extends Component {
 
@@ -55,31 +47,6 @@ export default class purchasedetail extends Component {
 
    }
 
-
-   async cryptoPaymentFailed() {
-    var willSearch = await Swal.fire({
-       title: 'Payment declined!',
-       text: 'Something went wrong! please try again.',
-       icon: 'error',
-       width: 500,
-       confirmButtonColor: '#3085d6',
-       allowOutsideClick: false,
-       confirmButtonText: 'Continue',
-    });
- }
-
- async cryptoPaymentSucces() {
-    var willSearch = await Swal.fire({
-       title: 'Payment successful!',
-       text: 'Congratulations, you are successfully completed the payment.',
-       icon: 'success',
-       width: 500,
-       confirmButtonColor: '#3085d6',
-       allowOutsideClick: false,
-       confirmButtonText: 'View Purchased items',
-    });
-
- }
 
    loading(id) {
       if (id == '1') {
@@ -155,8 +122,7 @@ export default class purchasedetail extends Component {
                                     <li className="edit-ln" ><Link onClick={this.loading.bind(this, '2')} to={`${config.baseUrl}about`}>About</Link></li>
                                     <li className="edit-ln" ><Link onClick={this.loading.bind(this, '3')} to={`${config.baseUrl}salehistory`}>Sell History</Link></li>
                                     <li className="edit-ln active" ><Link onClick={this.loading.bind(this, '4')} to={`${config.baseUrl}yourpurchase`}>Purchases and Bids</Link></li>
-                                    {/* <li className="edit-ln" ><Link onClick={this.loading.bind(this, '5')} to={`${config.baseUrl}paymentsetting`}>Wallet</Link></li> */}
-                                    {/* <li className="edit-ln" ><Link onClick={this.loading.bind(this,'7')} to={`${config.baseUrl}royalty`}>Royalty</Link></li> */}
+      
                                  </ul>
                               </div>
                            </div>
@@ -184,9 +150,7 @@ export default class purchasedetail extends Component {
          <li class="list-group-item list-group-item-action">
             <div class="n-chk"><label class="new-control new-checkbox pl-0 w-100 justify-content-between"><span class=" col-sm-6">Price:</span><span class=" d-block col-sm-6"> {this.state.transactionDetailAPIData?.amount} VUL</span></label></div>
          </li>
-         {/* <li class="list-group-item list-group-item-action">
-            <div class="n-chk"><label class="new-control new-checkbox pl-0 w-100 justify-content-between"><span class=" col-sm-6">Token ID:</span><span class=" d-block col-sm-6">25</span></label></div>
-         </li> */}
+
          <li class="list-group-item list-group-item-action">
             <div class="n-chk"><label class="new-control new-checkbox pl-0 w-100 justify-content-between"><span class=" col-sm-6">Date:</span><span class=" d-block col-sm-6">{this.state.transactionDetailAPIData?.datetime}</span></label></div>
          </li>
@@ -212,9 +176,6 @@ export default class purchasedetail extends Component {
          <li class="list-group-item list-group-item-action">
             <div class="n-chk"><label class="new-control new-checkbox pl-0 w-100 justify-content-between"><span class=" col-sm-6">Status:</span><span class=" d-block col-sm-6">{this.state.transactionDetailAPIData?.status}</span></label></div>
          </li>
-         {/* <li class="list-group-item list-group-item-action">
-            <div class="n-chk"><label class="new-control new-checkbox pl-0 w-100 justify-content-between"><span class=" col-sm-6">Description:</span><span class=" d-block col-sm-6">The First Encounter: Travis siblings come across to what will be their first test of resilience, strength, and strategic planning. Copperhead, a CAT-IV Kaiju, emerges to threaten humanity at Shadow Basin, the series’ first villain, and a memorable one!</span></label></div>
-         </li> */}
         
          {this.state.transactionDetailAPIData?.transfer_hash === null || this.state.transactionDetailAPIData?.transfer_hash === undefined || this.state.transactionDetailAPIData?.transfer_hash === '' || this.state.transactionDetailAPIData?.status === 'Pending'
          ?'':   
@@ -222,10 +183,7 @@ export default class purchasedetail extends Component {
          <div class="n-chk"><label class="new-control new-checkbox pl-0 w-100 justify-content-between"><span class=" col-sm-6">Blockchain View:</span><span class=" d-block col-sm-6"><a href={this.state.transactionDetailAPIData?.transfer_hash} target="_blank" class="link"><button class="btn btn-primary">Blockchain View</button></a></span></label></div>
       </li>   
       }
-      
-         {/* <li class="list-group-item list-group-item-action">
-            <div class="n-chk"><label class="new-control new-checkbox pl-0 w-100 justify-content-between"><span class=" col-sm-6">Payment Mode:</span><span class=" d-block col-sm-6">Crypto</span></label></div>
-         </li> */}
+
       </ul>
    </div>
    <div class="col-sm-2"></div>

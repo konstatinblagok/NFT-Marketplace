@@ -139,14 +139,6 @@ export default class featurescreator extends Component {
       if (this.loginData?.data?.id != this.user_id) {
          this.getViewCountAPI()
       }
-      // setTimeout(() => {
-      //    if (window.ethereum) {
-      //       const { ethereum } = window;
-      //       this.setState({
-      //          ConnectWalletAddress: ethereum.selectedAddress
-      //       })
-      //    }
-      // }, 1000);
 
       this.getUserCollectionsAPI()
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -183,35 +175,6 @@ export default class featurescreator extends Component {
          });
       }
    }
-
-
-
-
-   async cryptoPaymentFailed() {
-      var willSearch = await Swal.fire({
-         title: 'Payment declined!',
-         text: 'Something went wrong! please try again.',
-         icon: 'error',
-         width: 500,
-         confirmButtonColor: '#3085d6',
-         allowOutsideClick: false,
-         confirmButtonText: 'Continue',
-      });
-   }
-
-   async cryptoPaymentSucces() {
-      var willSearch = await Swal.fire({
-         title: 'Payment successful!',
-         text: 'Congratulations, you are successfully completed the payment.',
-         icon: 'success',
-         width: 500,
-         confirmButtonColor: '#3085d6',
-         allowOutsideClick: false,
-         confirmButtonText: 'View Purchased items',
-      });
-
-   }
-
 
    onChange = e => {
       this.setState({
@@ -1396,215 +1359,8 @@ export default class featurescreator extends Component {
                                     </div>
                                  </div>
                                  <br />
-                                 <div className="tab-info" style={{ display: "none" }}>
-                                    <div className=" custom-container ">
-                                       <div className="container hot-bid">
-                                          <div className="row">
+                                 
 
-                                             <div className="col-md-12">
-                                                <br />
-                                                <div className="row _post-container_">
-
-                                                   <div className="category-2 mix col-md-4">
-                                                      <div className="be-post">
-                                                         <a href="#page2.html" className="be-img-block">
-                                                            <img src="images/p2.jpg" alt="omg" />
-                                                         </a>
-                                                         <a href="#page2.html" className="be-post-title">Treebeard</a>
-                                                         <span>
-                                                         </span>
-                                                         <div className="author-post">
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                   <div className="category-3 mix col-md-4">
-                                                      <div className="be-post">
-                                                         <a href="#page3.html" className="be-img-block">
-                                                            <img src="images/p3.jpg" alt="omg" />
-                                                         </a>
-                                                         <a href="#page3.html" className="be-post-title">Colors of Ramadan</a>
-                                                         <span>
-                                                         </span>
-                                                         <div className="author-post">
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                   <div className="category-4 mix col-md-4">
-                                                      <div className="be-post">
-                                                         <a href="#page1.html" className="be-img-block">
-                                                            <img src="images/p4.jpg" alt="omg" />
-                                                         </a>
-                                                         <a href="#page1.html" className="be-post-title">Leaving Home - L'Officiel Ukraine</a>
-                                                         <span>
-                                                         </span>
-                                                         <div className="author-post">
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                   <div className="category-2 mix col-md-4">
-                                                      <div className="be-post">
-                                                         <a href="#page2.html" className="be-img-block">
-                                                            <img src="images/p10.jpg" alt="omg" />
-                                                         </a>
-                                                         <a href="#page2.html" className="be-post-title">Treebeard</a>
-                                                         <span>
-                                                         </span>
-                                                         <div className="author-post">
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                   <div className="category-3 mix col-md-4">
-                                                      <div className="be-post">
-                                                         <a href="#page3.html" className="be-img-block">
-                                                            <img src="images/p9.jpg" alt="omg" />
-                                                         </a>
-                                                         <a href="#page3.html" className="be-post-title">Colors of Ramadan</a>
-                                                         <span>
-                                                         </span>
-                                                         <div className="author-post">
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                   <div className="category-4 mix col-md-4">
-                                                      <div className="be-post">
-                                                         <a href="#page1.html" className="be-img-block">
-                                                            <img src="images/p8.jpg" alt="omg" />
-                                                         </a>
-                                                         <a href="#page1.html" className="be-post-title">Leaving Home - L'Officiel Ukraine</a>
-                                                         <span>
-                                                         </span>
-                                                         <div className="author-post">
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <div className="tab-info" style={{ display: "none" }}>
-                                    <div className="row">
-                                       <div className="col-ml-12 col-xs-12 col-md-12">
-                                          <div className="table-responsive">
-                                             <table id="default-ordering" className="table" style={{ width: "100%" }}>
-                                                <thead>
-                                                   <tr>
-                                                      <th>S.no</th>
-                                                      <th>Product image</th>
-                                                      <th>Product Name</th>
-                                                      <th>Product Price</th>
-                                                      <th>Product unit</th>
-
-                                                   </tr>
-                                                </thead>
-                                                <tbody>
-                                                   <tr>
-                                                      <td>1</td>
-                                                      <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                      <td>Goona</td>
-                                                      <td>$200</td>
-                                                      <td>2</td>
-
-                                                   </tr>
-                                                   <tr>
-                                                      <td>2</td>
-                                                      <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                      <td>Goona</td>
-                                                      <td>$300</td>
-                                                      <td>3</td>
-
-                                                   </tr>
-                                                   <tr>
-                                                      <td>3</td>
-                                                      <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                      <td>Goona</td>
-                                                      <td>$400</td>
-                                                      <td>4</td>
-
-                                                   </tr>
-                                                   <tr>
-                                                      <td>4</td>
-                                                      <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                      <td>Goona</td>
-                                                      <td>$500</td>
-                                                      <td>5</td>
-
-                                                   </tr>
-                                                   <tr>
-                                                      <td>5</td>
-                                                      <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                      <td>Goona</td>
-                                                      <td>$600</td>
-                                                      <td>6</td>
-
-                                                   </tr>
-                                                </tbody>
-                                             </table>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <div className="tab-info" style={{ display: "none" }}>
-                                    <div className="col-sm-12">
-                                       <div className="table-responsive">
-                                          <table id="default-ordering" className="table" style={{ width: "100%" }}>
-                                             <thead>
-                                                <tr>
-                                                   <th>S.no</th>
-                                                   <th>Product image</th>
-                                                   <th>Product Name</th>
-                                                   <th>Product Price</th>
-                                                   <th>Product unit</th>
-
-                                                </tr>
-                                             </thead>
-                                             <tbody>
-                                                <tr>
-                                                   <td>1</td>
-                                                   <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                   <td>Goona</td>
-                                                   <td>$200</td>
-                                                   <td>2</td>
-
-                                                </tr>
-                                                <tr>
-                                                   <td>2</td>
-                                                   <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                   <td>Goona</td>
-                                                   <td>$300</td>
-                                                   <td>3</td>
-
-                                                </tr>
-                                                <tr>
-                                                   <td>3</td>
-                                                   <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                   <td>Goona</td>
-                                                   <td>$400</td>
-                                                   <td>4</td>
-
-                                                </tr>
-                                                <tr>
-                                                   <td>4</td>
-                                                   <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                   <td>Goona</td>
-                                                   <td>$500</td>
-                                                   <td>5</td>
-
-                                                </tr>
-                                                <tr>
-                                                   <td>5</td>
-                                                   <td><img src="https://tv-inventory.s3.eu-west-2.amazonaws.com/terravirtuaart/images/small/asw_rsq_5.png" className="profile-img" alt="avatar" width="64px" /></td>
-                                                   <td>Goona</td>
-                                                   <td>$600</td>
-                                                   <td>6</td>
-
-                                                </tr>
-                                             </tbody>
-                                          </table>
-                                       </div>
-                                    </div>
-                                 </div>
                               </div>
                            </div>
                         </div>
@@ -1818,16 +1574,9 @@ export default class featurescreator extends Component {
                                              value={this.state.expiry_date} minDate={new Date()}
                                              name="expiry_date"
                                           />
-                                          {/* <DatePicker className="form-control"
-                 selected={ this.state.start_date }
-                 
-                 onChange={date => this.handleChange(date) }
-                 name="start_date"
-                 dateFormat="MM/dd/yyyy"
-             /> */}
+                                      
                                        </div>
-                                       {/* <input type="date" className="form-control" value={this.state.expiry_date} name="expiry_date" 
-                     onChange={this.onChange}/> */}
+                                    
                                        <span className="error-asterick"> {this.state.expiry_dateError}</span>
 
                                     </div>
@@ -1855,46 +1604,24 @@ export default class featurescreator extends Component {
 
 
 
-                                 {/* <div className="input-col col-xs-12 col-sm-12">
-                                    <div className="form-group focus-2">
-                                       <input className="input-checkbox100" id="ckb1" type="checkbox" name="remember-me" onChange={this.onChange} />
-                                       <label class="label-checkbox100" for="ckb1">For Upcoming Drops</label>
-
-
-                                    </div>
-                                 </div> */}
-
                                  {this.state.dateShow === 1 ?
                                     <>
                                        <div className="input-col col-xs-12 col-sm-6">
                                           <div className="form-group focus-2">
                                              <div className="form-label">Start Date</div>
-                                             {/* <input type="date" className="form-control" value={this.state.start_date} name="start_date" 
-                     onChange={this.onChange}/> */}
+                                        
                                              <div className="form-group addnftdate">
                                                 <DatePicker className="form-control"
                                                    onChange={this.handleChange} minDate={new Date()}
                                                    value={this.state.start_date}
                                                    name="start_date"
                                                 />
-                                                {/* <DatePicker className="form-control"
-                 selected={ this.state.start_date }
-                 
-                 onChange={date => this.handleChange(date) }
-                 name="start_date"
-                 dateFormat="MM/dd/yyyy"
-             /> */}
+                                       
                                              </div>
                                           </div>
                                        </div>
 
-                                       {/* <div className="input-col col-xs-6 col-sm-6">
-                  <div className="form-group focus-2">
-                     <div className="form-label">End Date</div>                 
-                     <input type="date" className="form-control" value={this.state.end_date} name="end_date" 
-                     onChange={this.onChange}/>
-                  </div>                
-               </div> */}
+                             
                                     </> : ''
                                  }
 
@@ -1917,162 +1644,7 @@ export default class featurescreator extends Component {
                            </div>
 
                            :
-
-
-
-                           <div className="tab-wrapper style-1" style={{ padding: '25px', minHeight: '347px' }}>
-                              {(this.state.loaderShow) ?
-                                 <Loader className="paymentLoader"
-                                    type="Puff"
-                                    color="#00BFFF"
-                                    height={80}
-                                    width={80}
-                                 /> : ''}
-                              <div className="tab-nav-wrapper" style={{ opacity: `${(this.state.loaderShow) ? '0.1' : '1'}` }}>
-                                 <div className="nav-tab  clearfix">
-                                    {(this.state.loaderShow) ?
-                                       <>
-                                          <div className={(this.state.etherClickActive) == 0 ? "nav-tab-item active" : "nav-tab-item"} >
-                                             <span>Credit Card</span>
-                                          </div>
-                                          <div className={(this.state.etherClickActive) == 1 ? "nav-tab-item active" : "nav-tab-item"} >
-                                             <span className="text-black">Crypto</span>
-                                          </div>
-
-                                          <div className={(this.state.etherClickActive) == 2 ? "nav-tab-item active" : "nav-tab-item"} >
-                                             <span className="text-black">Wallet</span>
-                                          </div>
-                                       </>
-                                       :
-                                       <>
-                                          <div className={this.state.etherClickActive == 0 ? "nav-tab-item active" : "nav-tab-item"} onClick={this.etherClick.bind(this, 'cc')}>
-                                             <span>Credit Card</span>
-                                          </div>
-                                          <div className={this.state.etherClickActive == 1 ? "nav-tab-item active" : "nav-tab-item"} onClick={this.etherClick.bind(this, 'Ether')}>
-                                             <span className="text-black">Crypto</span>
-                                          </div>
-
-                                          <div className={this.state.etherClickActive == 2 ? "nav-tab-item active" : "nav-tab-item"} onClick={this.etherClick.bind(this, 'Wallet')}>
-                                             <span className="text-black">Wallet</span>
-                                          </div>
-                                       </>
-                                    }
-
-
-                                 </div>
-                              </div>
-                              <div className="tabs-content clearfix">
-                                 <div className={this.state.etherClickActive == 0 ? "tab-info" : "tab-info active"} style={{ display: this.state.etherClickActive == 0 ? 'block' : 'none' }}>
-                                    <div className="row">
-                                       <div className="col-ml-12 col-xs-12 col-sm-12">
-                                          <div className="col-12 mt-3">
-                                             <p>Price : {this.state.getListUser?.transfer_fee_eth} ETH ~ ${this.state.getListUser?.transfer_fee_usd}</p>
-                                          </div>
-
-
-                                          <div className="col-12 mt-3">
-                                             <div className="input-group">
-                                                <input type="number" className="form-control "
-                                                   placeholder="Card Number" maxLength={16} name="cardNumber" onChange={this.onChange} value={this.state.cardNumber} />
-                                             </div>
-                                          </div>
-
-                                          <div className="row">
-                                             <div className="col-sm-4 mt-3 mb-2">
-                                                <div className="input-group">
-                                                   <input type="number" className="form-control "
-                                                      placeholder="Exp Month" name="expMonth" onChange={this.onChange} value={this.state.expMonth} />
-                                                   {/* <input type="date" className="form-control datepicker " placeholder="12/11/1997" name="Date" /> */}
-                                                </div>
-                                             </div>
-
-                                             <div className="col-sm-4 mt-3 mb-2">
-                                                <div className="input-group">
-                                                   <input type="number" className="form-control "
-                                                      placeholder="Exp Year" name="expYear" onChange={this.onChange} value={this.state.expYear} />
-                                                   {/* <input type="date" className="form-control datepicker " placeholder="12/11/1997" name="Date" required=""/> */}
-                                                </div>
-                                             </div>
-
-
-
-                                             <div className="col-sm-4 mt-3 mb-2">
-                                                <div className="input-group">
-                                                   <input type="number" className="form-control " placeholder="CVC" name="cvc" onChange={this.onChange} value={this.state.cvc} />
-                                                </div>
-                                             </div>
-                                          </div>
-
-                                          {/* <div className="col-12 text-right mt-1">
-               <label className="form-check-label">
-               <input type="checkbox" className="mr-2 remember_card_checkbox" name="remember_card" checked=""/>
-               Save for future use.
-               </label>
-            </div> */}
-                                          {this.state.errorMessageSripe === '' ? '' : <p style={{ color: 'red' }}> {this.state.errorMessageSripe}</p>}
-
-                                          <div className="col-12 mt-3">
-                                             {this.state.loadingStripe === 0 ?
-                                                <button type="submit" className="btn btn-primary col-sm-12 size-1 " disabled={!this.state.cardNumber || !this.state.expYear || !this.state.expMonth || !this.state.cvc} onClick={this.paymentStripeShow} >Pay with card</button> :
-                                                <button type="submit" className="btn btn-primary col-sm-12 size-1 " disabled >Processing...</button>
-
-                                             }
-
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <div class={this.state.etherClickActive == 1 ? "tab-info" : "tab-info active"} style={{ display: this.state.etherClickActive == 1 ? 'block' : 'none' }}>
-
-                                    <div className="col-12 nopadding">
-                                       <p>Price : {this.state.getListUser?.transfer_fee_eth} ETH ~ ${this.state.getListUser?.transfer_fee_usd}</p>
-                                       <div className="mt-2">
-                                          You need to deposit selected Cryptocurrency to complete your purchase.</div>
-                                    </div>
-                                    <div className="mt-4">
-                                       <div className="col-12 nopadding">
-                                          <div className="col-12 nopadding">
-                                             {(this.state.loaderShow == false) ?
-                                                <button type="submit" className="btn btn-primary col-sm-12 size-1" onClick={this.paymentNetsents} >Pay With crypto</button> :
-                                                <button type="submit" className="btn btn-primary col-sm-12 size-1" disabled >Processing...</button>
-                                             }
-
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-
-                                 <div class={this.state.etherClickActive == 2 ? "tab-info" : "tab-info active"} style={{ display: this.state.etherClickActive == 2 ? 'block' : 'none' }}>
-                                    <div className="col-12 mt-3">
-                                       <p>Price : {this.state.getListUser?.transfer_fee_eth} ETH ~ ${this.state.getListUser?.transfer_fee_usd}</p>
-                                    </div>
-                                    <div className="col-12 mt-3">
-
-                                       <div className="input-group">
-                                          Wallet Balance : {this.state.getListUser?.wallet_balance_eth} ETH ~ ${this.state.getListUser?.wallet_balance_usd}
-                                       </div>
-                                    </div>
-                                    <div className="mt-4">
-                                       {this.state.errorMessageSripe === '' ? '' : <p style={{ color: 'red' }}> {this.state.errorMessageSripe}</p>}
-                                       <div className="col-12 nopadding">
-                                          {this.state.loadingStripe === 0 ?
-                                             <button type="submit" className="btn btn-primary col-sm-12 size-1" onClick={this.paymentStripeWallet} >Pay with wallet</button> :
-                                             <button type="submit" className="btn btn-primary col-sm-12 size-1" disabled >Processing...</button>
-                                          }
-
-                                          {/* <span style={{color:'red',fontFamily:'cursive',textAlign:'center'}}>{this.state.ErrorMessage}</span> */}
-
-                                          <div className="my-3 text-center">
-
-
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-
-                              </div>
-                           </div>
-
+                                    ""
 
                         }
 

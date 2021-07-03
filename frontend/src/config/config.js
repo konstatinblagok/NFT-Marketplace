@@ -4,11 +4,11 @@ const config = {
   imageUrl:"https://ipfs.io/ipfs/",
   adminAddress : "0xb1b3b9104c0ee3fc67626b50374509ad11ded0fd",
 
-  apiUrl : "https://espsofttech.tech:6001/api/" ,
-  imageUrl1:"https://espsofttech.tech/vulnerary/vulnerary_backend/uploads/",
+  // apiUrl : "https://espsofttech.tech:6001/api/" ,
+  // imageUrl1:"https://espsofttech.tech/vulnerary/vulnerary_backend/uploads/",
             
-  // apiUrl : "http://localhost:8000/api/",
-  // imageUrl1:"http://localhost/wfh/vulnerary/vulnerary_backend/uploads/",
+  apiUrl : "http://localhost:8000/api/",
+  imageUrl1:"http://localhost/wfh/vulnerary/vulnerary_backend/uploads/",
 
 //========================== Root server  ===================== 
 
