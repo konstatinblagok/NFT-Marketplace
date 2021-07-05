@@ -28,7 +28,6 @@
     "file-type": "^16.5.0",
     "form-data": "^4.0.0",
     "formidable": "^1.2.2",
-    "image-thumbnail": "^1.0.13",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
     "mysql": "^2.18.1",
