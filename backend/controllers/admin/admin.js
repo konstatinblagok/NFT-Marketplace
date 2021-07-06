@@ -67,3 +67,54 @@ var FormData = require('form-data');
         }
     });
     }
+
+    exports.getDigitalCategory = async (db,req,res)=>{
+        await db.query(adminQueries.getDigitalCategory,function(error,data){
+            if(error){
+            return res.status(400).send({
+                success: false,
+                msg: "Error occured!!",
+                error
+            });
+        }
+            if(data.length>0){
+        res.status(200).send({
+            success:true,
+            msg : "Category Item Details",
+            response:data
+         });
+            }else{
+                res.status(200).send({
+                    success:false,
+                    msg:"No data found!!"
+                });            
+            }
+        });
+        }
+
+        exports.getwalletDetails = async (db,req,res)=>{
+            var user_id = req.body.user_id
+            await db.query(adminQueries.getwalletDetails, user_id ,function(error,data){
+                if(error){
+                return res.status(400).send({
+                    success: false,
+                    msg: "Error occured!!",
+                    error
+                });
+            }
+                if(data.length > 0){
+            res.status(200).send({
+                success:true,
+                msg : "Wallet Details",
+                response : data,
+                data:data[0]
+            });
+                }else{
+                    res.status(400).send({
+                        success:false,
+                        msg:"No data found!!"
+                    });            
+                }
+            });
+         }     
+                

@@ -79,7 +79,7 @@ router.get('/getitem',admin.getItem.bind(this, db));
 
 router.post('/addTelent',ensureWebToken,marketplace.addTelent.bind(this, db));
 
-
+router.post('/getwalletDetails',admin.getwalletDetails.bind(this, db));
 router.post('/itemdetail',marketplace.itemDetails.bind(this,db));
 router.post('/ItemDetailForEdit',marketplace.ItemDetailForEdit.bind(this,db));
 router.post('/purchaseNft',marketplace.purchaseNft.bind(this,db));
@@ -96,7 +96,7 @@ router.post('/addNftByUser',addnftImage, marketplace.addNftByUser.bind(this,db))
 router.post('/getPayoutAddress',marketplace.getPayoutAddress.bind(this,db));
 router.post('/getRoyaltyTransaction',marketplace.getRoyaltyTransaction.bind(this,db));
 
-
+router.get('/getDigitalCategory', admin.getDigitalCategory.bind(this, db));
 
 
 router.post('/getQR',marketplace.getQR.bind(this,db));
